@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/style.css">
+    <title>Document</title>
+</head>
+
+<body>
+    <nav id="navbar">
+        <header>React main concepts</header>
+        <ul>
+            <li><a href="#Hello_World" class="nav-link">Hello World</a></li>
+            <li><a href="#Introducing_JSX" class="nav-link">Introduction to JSX</a></li>
+            <li><a href="#Rendering_Elements" class="nav-link">Rendering Elements</a></li>
+            <li><a href="#Components_and_Props" class="nav-link">Components and Props</a></li>
+            <li><a href="#State_and_Lifecycle" class="nav-link">State and LifeCycle</a></li>
+        </ul>
+    </nav>
+    <main id="main-doc">
+        <section class="main-section" id="Hello_World">
+            <header>
+                Hello World
+            </header>
+            <p>
+                In this guide, we will examine the building blocks of React apps: elements and components. Once you
+                master them, you can create complex apps from small reusable pieces.
+            <ul>
+                <li>
+                    This guide is designed for people who prefer learning concepts step by step. If you prefer to learn
+                    by doing, check out our <a href="https://reactjs.org/tutorial/tutorial.html">practical tutorial</a>.
+                    You might find this guide and the tutorial complementary to each other.
+                </li>
+            </ul>
+            </p>
+        </section>
+        <section class="main-section" id="Introducing_JSX">
+            <header>
+                Introducing JSX
+            </header>
+            <p>
+                It is called JSX, and it is a syntax extension to JavaScript. We recommend using it with React to
+                describe what the UI should look like. JSX may remind you of a template language, but it comes with the
+                full power of JavaScript.
+
+                JSX produces React “elements”. We will explore rendering them to the DOM in the next section. Below, you
+                can find the basics of JSX necessary to get you started.
+
+                Why JSX?
+                React embraces the fact that rendering logic is inherently coupled with other UI logic: how events are
+                handled, how the state changes over time, and how the data is prepared for display.
+
+                Instead of artificially separating technologies by putting markup and logic in separate files, React
+                separates concerns with loosely coupled units called “components” that contain both. We will come back
+                to components in a further section, but if you’re not yet comfortable putting markup in JS, this talk
+                might convince you otherwise.
+
+                React doesn’t require using JSX, but most people find it helpful as a visual aid when working with UI
+                inside the JavaScript code. It also allows React to show more useful error and warning messages.
+
+                With that out of the way, let’s get started!
+
+
+            </p>
+        </section>
+        <section class="main-section" id="Rendering_Elements">
+            <header>
+                Rendering Elements
+            </header>
+            <p>
+                The react-dom package provides DOM-specific methods that can be used at the top
+                level of your app and as an escape hatch to get outside of the React model if
+                you need to. Most of your components should not need to use this module.
+            <ul>
+                <li>
+                    <a href="https://reactjs.org/docs/react-dom.html#render">render()</a>
+                    <p>
+                        Render a React element into the DOM in the supplied container and return a reference to the
+                        component (or returns null for stateless components).
+                        If the React element was previously rendered into container, this will perform an update on it
+                        and only mutate the DOM as necessary to reflect the latest React element.
+                        If the optional callback is provided, it will be executed after the component is rendered or
+                        updated.
+                    </p>
+                </li>
+                <li>
+                    <a href="https://reactjs.org/docs/react-dom.html#hydrate">hydrate()</a>
+                    <p>
+                        Same as render(), but is used to hydrate a container whose HTML contents were rendered by
+                        ReactDOMServer. React will attempt to attach event listeners to the existing markup.
+
+                        React expects that the rendered content is identical between the server and the client. It can
+                        patch up differences in text content, but you should treat mismatches as bugs and fix them. In
+                        development mode, React warns about mismatches during hydration. There are no guarantees that
+                        attribute differences will be patched up in case of mismatches. This is important for
+                        performance reasons because in most apps, mismatches are rare, and so validating all markup
+                        would be prohibitively expensive.
+
+                        If a single element’s attribute or text content is unavoidably different between the server and
+                        the client (for example, a timestamp), you may silence the warning by adding
+                        suppressHydrationWarning={true} to the element. It only works one level deep, and is intended to
+                        be an escape hatch. Don’t overuse it. Unless it’s text content, React still won’t attempt to
+                        patch it up, so it may remain inconsistent until future updates.
+
+                        If you intentionally need to render something different on the server and the client, you can do
+                        a two-pass rendering. Components that render something different on the client can read a state
+                        variable like this.state.isClient, which you can set to true in componentDidMount(). This way
+                        the initial render pass will render the same content as the server, avoiding mismatches, but an
+                        additional pass will happen synchronously right after hydration. Note that this approach will
+                        make your components slower because they have to render twice, so use it with caution.
+
+                        Remember to be mindful of user experience on slow connections. The JavaScript code may load
+                        significantly later than the initial HTML render, so if you render something different in the
+                        client-only pass, the transition can be jarring. However, if executed well, it may be beneficial
+                        to render a “shell” of the application on the server, and only show some of the extra widgets on
+                        the client. To learn how to do this without getting the markup mismatch issues, refer to the
+                        explanation in the previous paragraph.
+
+
+                    </p>
+                </li>
+                <li>
+                    <a
+                        href="https://reactjs.org/docs/react-dom.html#unmountcomponentatnode">unmountComponentAtNode()</a>
+                    <p>
+                        Remove a mounted React component from the DOM and clean up its event handlers and state. If no
+                        component was mounted in the container, calling this function does nothing. Returns true if a
+                        component was unmounted and false if there was no component to unmount.
+                    </p>
+                </li>
+                <li>
+                    <a href="https://reactjs.org/docs/react-dom.html#finddomnode">findDOMNode()</a>
+                    <p>
+                        If this component has been mounted into the DOM, this returns the corresponding native browser
+                        DOM element. This method is useful for reading values out of the DOM, such as form field values
+                        and performing DOM measurements. In most cases, you can attach a ref to the DOM node and avoid
+                        using findDOMNode at all.
+
+                        When a component renders to null or false, findDOMNode returns null. When a component renders to
+                        a string, findDOMNode returns a text DOM node containing that value. As of React 16, a component
+                        may return a fragment with multiple children, in which case findDOMNode will return the DOM node
+                        corresponding to the first non-empty child.
+                    </p>
+                </li>
+                <li>
+                    <a href="https://reactjs.org/docs/react-dom.html#createportal">createPortal()</a>
+                    <p>
+                        Creates a portal. Portals provide a way to render children into a DOM node that exists outside
+                        the hierarchy of the DOM component.
+                    </p>
+                </li>
+
+            </ul>
+            </p>
+        </section>
+        <section class="main-section" id="Components_and_Props">
+            <header>
+                Components and Props
+            </header>
+            <p>
+                Conceptually, components are like JavaScript functions.
+                They accept arbitrary inputs (called “props”) and return React elements describing
+                what should appear on the screen.
+            </p>
+            <h4>Function and Class Components</h4>
+            <p>
+                The simplest way to define a component is to write a JavaScript function:
+            <pre>
+                    <code>
+                        function Welcome(props) {
+                            return &lt;h1&gt;Hello, {props.name}&lt;/h1&gt;;
+                          }
+                    </code>
+                </pre>
+            This function is a valid React component because it accepts a
+            single “props” (which stands for properties) object argument with data and returns a React element.
+            We call such components “function components”
+            because they are literally JavaScript functions.You can al use an ES6 class to define a component:
+            <pre>
+                    <code>
+                        class Welcome extends React.Component {
+                            render() {
+                              return &lt;h1&gt;Hello, {this.props.name}&lt;/h1&gt;
+                            }
+                          }
+                    </code>
+                </pre>
+            The above two components are equivalent from React’s point of view.
+            </p>
+            <h4>Rendering a Component</h4>
+            <p>
+                Previously, we only encountered React elements that represent DOM tags:
+            <pre>
+                    <code>
+                        const element = &lt;div /&gt;;
+                    </code>
+                </pre>
+            However, elements can also represent user-defined components:
+            <pre>
+                    <code>
+                        const element = &lt;Welcome name="Sara" /&gt;;
+                    </code>
+                </pre>
+            When React sees an element representing a user-defined component,
+            it passes JSX attributes and children to this component as a single object. We call this object “props”.
+            For example, this code renders “Hello, Sara” on the page:
+            <pre>
+                     <code>
+                        function Welcome(props) {
+                            return &lt;h1&gt;Hello, {props.name}&lt;/h1&gt;;
+                          }
+                          
+                          const element = &lt;Welcome name="Sara" /&gt;;
+                          ReactDOM.render(
+                            element,
+                            document.getElementById('root')
+                          );
+                     </code>
+                 </pre>
+            <ul>
+                Let’s recap what happens in this example:
+                <li>We call ReactDOM.render() with the &lt;Welcome name="Sara" /&gt; element.</li>
+                <li>React calls the Welcome component with {name: 'Sara'} as the props.</li>
+                <li>Our Welcome component returns a &lt;h1&gt;Hello, Sara&lt;/h1&gt; element as the result.</li>
+                <li>React DOM efficiently updates the DOM to match &lt;h1&gt;Hello, Sara&lt;/h1&gt;.</li>
+            </ul>
+            </p>
+        </section>
+        <section class="main-section" id="State_and_Lifecycle">
+            <header>
+                State and Lifecycle
+            </header>
+            <p>Consider the ticking clock example from one of the previous sections.
+                In Rendering Elements, we have only learned one way to update the UI.
+                We call ReactDOM.render() to change the rendered output:
+            </p>
+            <pre>
+                <code>
+                    function tick() {
+                        const element = (
+                            &lt;div&gt;
+                            &lt;h1&gt;Hello, world!&lt;/h1&gt;
+                            &lt;h2&gt;It is {new Date().toLocaleTimeString()}.&lt;/h2&gt;
+                            &lt;/div&gt;
+                        );
+                        ReactDOM.render(
+                          element,
+                          document.getElementById('root')
+                        );
+                      }
+                      
+                      setInterval(tick, 1000);
+                </code>
+            </pre>
+            <p>
+                In this section, we will learn how to make the Clock component truly reusable and encapsulated. It will
+                set up its own timer and update itself every second.
+                We can start by encapsulating how the clock looks:
+            </p>
+            <pre>
+                <code>
+                    function Clock(props) {
+                        return (
+                            &lt;div&gt;
+                            &lt;h1&gt;Hello, world!&lt;/h1&gt;
+                            &lt;h2&gt;It is {props.date.toLocaleTimeString()}.&lt;/h2&gt;
+                            &lt;/div&gt;
+                        );
+                      }
+                      
+                      function tick() {
+                        ReactDOM.render(
+                          <Clock date={new Date()} />,
+                          document.getElementById('root')
+                        );
+                      }
+                      
+                      setInterval(tick, 1000);
+                </code>
+            </pre>
+            <p>
+                However, it misses a crucial requirement: the fact that the Clock sets up a timer and updates the UI
+                every second should be an implementation detail of the Clock.
+                Ideally we want to write this once and have the Clock update itself:
+            </p>
+            <pre>
+                <code>
+                    ReactDOM.render(
+                        &lt;Clock /&gt;,
+                          document.getElementById('root')
+                    );
+                </code>
+            </pre>
+            <p>
+                To implement this, we need to add “state” to the Clock component.
+                State is similar to props, but it is private and fully controlled by the component.
+            </p>
+        </section>
+    </main>
+</body>
+
+</html>
